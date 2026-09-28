@@ -356,7 +356,7 @@ def get_stats(db: Session = Depends(get_db)):
         "success_rate_pct": round(success_rate, 1)
     }
 
-# Serve compiled Frontend static assets if available, or root landing page
+# Serve compiled Frontend static assets with Single Page Application (SPA) catch-all handler
 FRONTEND_DIST = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend", "dist")
 
 if os.path.exists(FRONTEND_DIST):
@@ -365,8 +365,17 @@ if os.path.exists(FRONTEND_DIST):
         app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
     @app.get("/")
-    def read_root():
-        return FileResponse(os.path.join(FRONTEND_DIST, "index.html"))
+    @app.get("/{full_path:path}")
+    def serve_spa(full_path: str = ""):
+        if full_path and full_path.startswith("api"):
+            raise HTTPException(status_code=404, detail="API endpoint not found")
+        file_path = os.path.join(FRONTEND_DIST, full_path)
+        if full_path and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        index_file = os.path.join(FRONTEND_DIST, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        raise HTTPException(status_code=404, detail="Frontend index not found")
 else:
     @app.get("/")
     def read_root():
