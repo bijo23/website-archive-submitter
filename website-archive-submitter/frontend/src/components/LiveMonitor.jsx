@@ -7,6 +7,16 @@ export default function LiveMonitor({ selectedJobId, onSelectProof }) {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
 
+  const formatProviderName = (name) => {
+    if (!name) return 'Unknown Provider';
+    const lower = name.toLowerCase();
+    if (lower.includes('simulated')) return 'Simulated Service';
+    if (lower.includes('wayback')) return 'Wayback Machine';
+    if (lower.includes('archive_today') || lower.includes('archive_ph') || lower.includes('archive.today')) return 'Archive.today';
+    if (lower.includes('both') || lower.includes('dual')) return 'Dual Submission';
+    return name.replace(/_/g, ' ');
+  };
+
   const fetchJobs = async () => {
     try {
       const resp = await fetch('/api/jobs');
@@ -191,7 +201,7 @@ export default function LiveMonitor({ selectedJobId, onSelectProof }) {
               <p className="text-lg font-bold text-slate-100 truncate mt-1" title={activeJob.target_domain}>
                 {activeJob.target_domain}
               </p>
-              <span className="text-xs text-slate-500">Depth: {activeJob.max_depth} | Service: {activeJob.service_target}</span>
+              <span className="text-xs text-slate-500">Depth: {activeJob.max_depth} | Service: {formatProviderName(activeJob.service_target)}</span>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">

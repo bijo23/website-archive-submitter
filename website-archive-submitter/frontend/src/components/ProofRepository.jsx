@@ -7,6 +7,16 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
   const [providerFilter, setProviderFilter] = useState('all');
   const [loading, setLoading] = useState(true);
 
+  const formatProviderName = (name) => {
+    if (!name) return 'Unknown Provider';
+    const lower = name.toLowerCase();
+    if (lower.includes('simulated')) return 'Simulated Service';
+    if (lower.includes('wayback')) return 'Wayback Machine';
+    if (lower.includes('archive_today') || lower.includes('archive_ph') || lower.includes('archive.today')) return 'Archive.today';
+    if (lower.includes('both') || lower.includes('dual')) return 'Dual Submission';
+    return name.replace(/_/g, ' ');
+  };
+
   const fetchProofs = async () => {
     try {
       const resp = await fetch('/api/proofs');
@@ -146,9 +156,9 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
                       </a>
                     </td>
 
-                    <td className="px-6 py-4 text-xs font-medium text-slate-400">
-                      <span className="uppercase tracking-wider px-2 py-1 rounded bg-slate-950 border border-slate-800">
-                        {p.provider_name.replace('_', ' ')}
+                    <td className="px-6 py-4 text-xs font-medium text-slate-300 whitespace-nowrap">
+                      <span className="inline-block px-2.5 py-1 rounded bg-slate-950 border border-slate-800 whitespace-nowrap font-sans font-semibold">
+                        {formatProviderName(p.provider_name)}
                       </span>
                     </td>
 
