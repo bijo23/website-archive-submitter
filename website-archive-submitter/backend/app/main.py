@@ -357,25 +357,33 @@ def get_stats(db: Session = Depends(get_db)):
     }
 
 # Serve compiled Frontend static assets with Single Page Application (SPA) catch-all handler
-FRONTEND_DIST = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend", "dist")
+FRONTEND_DIST_CANDIDATES = [
+    os.path.abspath("website-archive-submitter/frontend/dist"),
+    os.path.abspath("frontend/dist"),
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "frontend", "dist"),
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend", "dist"),
+    os.path.abspath("../frontend/dist"),
+    os.path.abspath("../../frontend/dist"),
+]
 
-if os.path.exists(FRONTEND_DIST):
-    assets_dir = os.path.join(FRONTEND_DIST, "assets")
-    if os.path.exists(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+FRONTEND_DIST = None
+for candidate in FRONTEND_DIST_CANDIDATES:
+    if os.path.exists(candidate) and os.path.exists(os.path.join(candidate, "index.html")):
+        FRONTEND_DIST = candidate
+        break
 
-    @app.get("/")
-    @app.get("/{full_path:path}")
-    def serve_spa(full_path: str = ""):
-        if full_path and full_path.startswith("api"):
-            raise HTTPException(status_code=404, detail="API endpoint not found")
-        file_path = os.path.join(FRONTEND_DIST, full_path)
-        if full_path and os.path.isfile(file_path):
-            return FileResponse(file_path)
-        index_file = os.path.join(FRONTEND_DIST, "index.html")
-        if os.path.exists(index_file):
-            return FileResponse(index_file)
-        raise HTTPException(status_code=404, detail="Frontend index not found")
+if FRONTEND_DIST:
+    class SPAStaticFiles(StaticFiles):
+        async def get_response(self, path: str, scope):
+            try:
+                response = await super().get_response(path, scope)
+                if response.status_code == 404 and not path.startswith("api/"):
+                    response = await super().get_response("index.html", scope)
+                return response
+            except Exception:
+                return await super().get_response("index.html", scope)
+
+    app.mount("/", SPAStaticFiles(directory=FRONTEND_DIST, html=True), name="frontend_spa")
 else:
     @app.get("/")
     def read_root():
@@ -384,5 +392,5 @@ else:
             "version": "2.0.0",
             "status": "online",
             "swagger_docs": "/docs",
-            "frontend_ui": "http://localhost:3000"
+            "notice": "Frontend dist not found. Please run npm run build in frontend directory."
         }

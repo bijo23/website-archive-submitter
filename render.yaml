@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: website-archive-submitter
+    env: python
+    buildCommand: bash build.sh
+    startCommand: bash start.sh
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
