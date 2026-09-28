@@ -49,7 +49,7 @@ export default function App() {
       )}
 
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        Website Archive Submitter & Automated Backup Repository Engine &bull; Antigravity Suite
+        Website Archive Submitter & Automated Backup Repository Engine
       </footer>
     </div>
   );
