@@ -33,9 +33,9 @@ export default function Analytics() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Title */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between card-hover-effect">
         <div>
           <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
             <BarChart2 className="h-5 w-5 text-blue-400" />
@@ -46,7 +46,7 @@ export default function Analytics() {
 
         <button
           onClick={fetchStats}
-          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center space-x-1"
+          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs flex items-center space-x-1 transition-colors"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           <span>Refresh Stats</span>
@@ -55,7 +55,7 @@ export default function Analytics() {
 
       {/* KPI Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg card-hover-effect">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase">Domains</span>
             <Globe className="h-4 w-4 text-blue-400" />
@@ -64,7 +64,7 @@ export default function Analytics() {
           <span className="text-xs text-slate-500 mt-1 block">Registered domains</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg card-hover-effect">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase">Total Jobs</span>
             <Layers className="h-4 w-4 text-indigo-400" />
@@ -73,7 +73,7 @@ export default function Analytics() {
           <span className="text-xs text-slate-500 mt-1 block">{stats.completed_jobs} completed</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg card-hover-effect">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase">Discovered URLs</span>
             <Layers className="h-4 w-4 text-indigo-400" />
@@ -82,7 +82,7 @@ export default function Analytics() {
           <span className="text-xs text-slate-500 mt-1 block">Valid targets</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg card-hover-effect">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase">Archive Proofs</span>
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
@@ -91,7 +91,7 @@ export default function Analytics() {
           <span className="text-xs text-slate-500 mt-1 block">Saved snapshots</span>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg card-hover-effect">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase">Success Rate</span>
             <CheckCircle2 className="h-4 w-4 text-emerald-400" />
@@ -102,7 +102,7 @@ export default function Analytics() {
       </div>
 
       {/* Bulk Exports Panel */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 card-hover-effect">
         <h3 className="text-lg font-semibold text-slate-100">Bulk Archive Records Export</h3>
         <p className="text-xs text-slate-400">Download complete proof manifest packages containing all snapshot URLs, cryptographic SHA-256 hashes, and submission timestamps.</p>
 
@@ -110,7 +110,7 @@ export default function Analytics() {
           <a
             href="/api/proofs/export/csv"
             download
-            className="flex items-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-blue-500/20 transition-all"
+            className="flex items-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.99]"
           >
             <Download className="h-4 w-4" />
             <span>Download CSV Spreadsheet</span>

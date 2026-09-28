@@ -25,6 +25,14 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
     fetchProofs();
   }, []);
 
+  const formatProviderName = (name) => {
+    if (!name) return 'Unknown Provider';
+    if (name.includes('simulated')) return 'Simulated Service';
+    if (name.includes('wayback')) return 'Wayback Machine';
+    if (name.includes('archive_today') || name.includes('archive_ph')) return 'Archive.today';
+    return name.replace(/_/g, ' ');
+  };
+
   const filteredProofs = proofs.filter(p => {
     const matchesSearch =
       p.original_url.toLowerCase().includes(search.toLowerCase()) ||
@@ -40,9 +48,9 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header & Search Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 card-hover-effect">
         <div>
           <div className="flex items-center space-x-2">
             <Lock className="h-5 w-5 text-emerald-400" />
@@ -128,7 +136,7 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
               ) : (
                 filteredProofs.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs font-bold text-blue-400">
+                    <td className="px-6 py-4 font-mono text-xs font-bold text-blue-400 whitespace-nowrap">
                       {p.proof_token}
                     </td>
 
@@ -146,9 +154,9 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
                       </a>
                     </td>
 
-                    <td className="px-6 py-4 text-xs font-medium text-slate-400">
-                      <span className="uppercase tracking-wider px-2 py-1 rounded bg-slate-950 border border-slate-800">
-                        {p.provider_name.replace('_', ' ')}
+                    <td className="px-6 py-4 text-xs font-medium text-slate-300 whitespace-nowrap">
+                      <span className="inline-block px-2.5 py-1 rounded bg-slate-950 border border-slate-800 whitespace-nowrap font-sans font-semibold">
+                        {formatProviderName(p.provider_name)}
                       </span>
                     </td>
 
@@ -156,13 +164,13 @@ export default function ProofRepository({ onOpenModal, initialSearch = '' }) {
                       {p.checksum_sha256.substring(0, 16)}...
                     </td>
 
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                         <CheckCircle2 className="h-3 w-3 mr-1" /> Verified
                       </span>
                     </td>
 
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-right whitespace-nowrap">
                       <button
                         onClick={() => onOpenModal(p)}
                         className="px-3 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 text-xs font-medium transition-all inline-flex items-center space-x-1"
