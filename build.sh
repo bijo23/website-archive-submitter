@@ -15,5 +15,6 @@ fi
 if [ -d "frontend" ]; then
   cd frontend
   npm install
-  npm run build
+  chmod -R +x node_modules/.bin || true
+  npx vite build
 fi
